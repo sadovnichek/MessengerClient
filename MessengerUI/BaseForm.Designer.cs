@@ -122,19 +122,20 @@
             // 
             splitContainer1.Panel2.Controls.Add(tableLayoutPanel);
             splitContainer1.Size = new Size(800, 422);
-            splitContainer1.SplitterDistance = 266;
+            splitContainer1.SplitterDistance = 100;
             splitContainer1.TabIndex = 1;
             // 
             // onlineUsers
             // 
+            onlineUsers.BorderStyle = BorderStyle.FixedSingle;
             onlineUsers.Dock = DockStyle.Fill;
-            onlineUsers.Font = new Font("Segoe UI", 28.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            onlineUsers.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             onlineUsers.FormattingEnabled = true;
             onlineUsers.HorizontalScrollbar = true;
-            onlineUsers.ItemHeight = 62;
+            onlineUsers.ItemHeight = 37;
             onlineUsers.Location = new Point(0, 0);
             onlineUsers.Name = "onlineUsers";
-            onlineUsers.Size = new Size(266, 422);
+            onlineUsers.Size = new Size(100, 422);
             onlineUsers.TabIndex = 0;
             // 
             // tableLayoutPanel
@@ -150,7 +151,7 @@
             tableLayoutPanel.RowCount = 2;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 71.80095F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 28.1990528F));
-            tableLayoutPanel.Size = new Size(530, 422);
+            tableLayoutPanel.Size = new Size(696, 422);
             tableLayoutPanel.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -165,14 +166,14 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(524, 113);
+            tableLayoutPanel1.Size = new Size(690, 113);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // sendButton
             // 
-            sendButton.Dock = DockStyle.Top;
+            sendButton.Anchor = AnchorStyles.Top;
             sendButton.Enabled = false;
-            sendButton.Location = new Point(411, 3);
+            sendButton.Location = new Point(558, 3);
             sendButton.MaximumSize = new Size(110, 30);
             sendButton.Name = "sendButton";
             sendButton.Size = new Size(110, 30);
@@ -185,19 +186,21 @@
             // 
             textField.Dock = DockStyle.Fill;
             textField.Location = new Point(3, 3);
+            textField.Margin = new Padding(3, 3, 3, 10);
             textField.Multiline = true;
             textField.Name = "textField";
-            textField.Size = new Size(402, 107);
+            textField.Size = new Size(531, 100);
             textField.TabIndex = 1;
             // 
             // chat
             // 
             chat.Dock = DockStyle.Fill;
+            chat.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             chat.Location = new Point(3, 3);
             chat.Multiline = true;
             chat.Name = "chat";
             chat.ReadOnly = true;
-            chat.Size = new Size(524, 297);
+            chat.Size = new Size(690, 297);
             chat.TabIndex = 1;
             // 
             // BaseForm
@@ -208,7 +211,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             Name = "BaseForm";
-            Text = "Form1";
+            Text = "MessengerClient";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);

@@ -1,6 +1,6 @@
 ﻿namespace MessengerUI
 {
-    partial class NameForm
+    partial class SetName
     {
         /// <summary>
         /// Required designer variable.
@@ -36,18 +36,18 @@
             // label
             // 
             label.AutoSize = true;
-            label.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            label.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             label.Location = new Point(29, 75);
             label.Name = "label";
-            label.Size = new Size(168, 41);
+            label.Size = new Size(158, 38);
             label.TabIndex = 0;
             label.Text = "Enter name";
             // 
-            // tokenField
+            // nameField
             // 
             nameField.Location = new Point(232, 89);
-            nameField.Name = "tokenField";
-            nameField.Size = new Size(187, 27);
+            nameField.Name = "nameField";
+            nameField.Size = new Size(195, 27);
             nameField.TabIndex = 1;
             // 
             // button
@@ -60,7 +60,7 @@
             button.UseVisualStyleBackColor = true;
             button.Click += button_Click;
             // 
-            // NameForm
+            // SetName
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -69,7 +69,7 @@
             Controls.Add(nameField);
             Controls.Add(label);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "NameForm";
+            Name = "SetName";
             ResumeLayout(false);
             PerformLayout();
         }

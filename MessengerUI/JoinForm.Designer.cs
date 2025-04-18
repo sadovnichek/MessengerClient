@@ -1,6 +1,6 @@
 ﻿namespace MessengerUI
 {
-    partial class JoinForm
+    partial class Join
     {
         /// <summary>
         /// Required designer variable.
@@ -36,10 +36,10 @@
             // label
             // 
             label.AutoSize = true;
-            label.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            label.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             label.Location = new Point(29, 75);
             label.Name = "label";
-            label.Size = new Size(170, 41);
+            label.Size = new Size(159, 38);
             label.TabIndex = 0;
             label.Text = "Enter token";
             // 
@@ -47,7 +47,7 @@
             // 
             tokenField.Location = new Point(232, 89);
             tokenField.Name = "tokenField";
-            tokenField.Size = new Size(187, 27);
+            tokenField.Size = new Size(195, 27);
             tokenField.TabIndex = 1;
             // 
             // button
@@ -60,7 +60,7 @@
             button.UseVisualStyleBackColor = true;
             button.Click += button_Click;
             // 
-            // JoinForm
+            // Join
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -69,8 +69,7 @@
             Controls.Add(tokenField);
             Controls.Add(label);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "JoinForm";
-            Text = "JoinForm";
+            Name = "Join";
             ResumeLayout(false);
             PerformLayout();
         }

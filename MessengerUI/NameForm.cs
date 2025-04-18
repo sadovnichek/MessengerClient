@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace MessengerUI
 {
-    public partial class NameForm : Form
+    public partial class SetName : Form
     {
         private Client client;
 
-        public NameForm(Client client)
+        public SetName(Client client)
         {
             InitializeComponent();
             this.client = client;

@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace MessengerUI
 {
-    public partial class JoinForm : Form
+    public partial class Join : Form
     {
         private Client client;
 
-        public JoinForm(Client client)
+        public Join(Client client)
         {
             InitializeComponent();
             this.client = client;

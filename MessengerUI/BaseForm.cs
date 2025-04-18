@@ -1,4 +1,6 @@
-﻿namespace MessengerUI
+﻿using System.Windows.Forms;
+
+namespace MessengerUI
 {
     public partial class BaseForm : Form
     {
@@ -42,6 +44,38 @@
             }
         }
 
+        private void ProcessDisconnect()
+        {
+            disconnectToolStripMenuItem.Enabled = false;
+            connectToolStripMenuItem.Enabled = true;
+            joinToolStripMenuItem.Enabled = false;
+            setNameToolStripMenuItem.Enabled = false;
+            createRoomToolStripMenuItem.Enabled = false;
+            sendButton.Invoke(new Action(() => sendButton.Enabled = false));
+            onlineUsers.Invoke(new Action(onlineUsers.Items.Clear));
+            chat.Invoke(new Action(chat.Clear));
+            textField.Invoke(new Action(textField.Clear));
+        }
+
+        private void ProcessQuit()
+        {
+            joinToolStripMenuItem.Enabled = true;
+            leaveRoomToolStripMenuItem.Enabled = false;
+            sendButton.Invoke(new Action(() => sendButton.Enabled = false));
+            onlineUsers.Invoke(new Action(onlineUsers.Items.Clear));
+            chat.Invoke(new Action(chat.Clear));
+            textField.Invoke(new Action(textField.Clear));
+        }
+
+        private void ProcessOnline(string message)
+        {
+            onlineUsers.Invoke(() =>
+            {
+                onlineUsers.Items.Clear();
+                message.Split()[1].Split(';').ToList().ForEach(p => onlineUsers.Items.Add(p));
+            });
+        }
+
         private async Task ReceiveMessageAsync(Client client)
         {
             while (true)
@@ -49,17 +83,9 @@
                 var message = await client.Reader.ReadLineAsync();
                 if (string.IsNullOrEmpty(message))
                     continue;
-                else if (message == "DISCONNECT ACCEPTED")
+                if (message.StartsWith("DISCONNECT ACCEPTED"))
                 {
-                    disconnectToolStripMenuItem.Enabled = false;
-                    connectToolStripMenuItem.Enabled = true;
-                    joinToolStripMenuItem.Enabled = false;
-                    setNameToolStripMenuItem.Enabled = false;
-                    createRoomToolStripMenuItem.Enabled = false;
-                    sendButton.Invoke(new Action(() => sendButton.Enabled = false));
-                    onlineUsers.Invoke(new Action(onlineUsers.Items.Clear));
-                    chat.Invoke(new Action(chat.Clear));
-                    textField.Invoke(new Action(textField.Clear));
+                    ProcessDisconnect();
                     break;
                 }
                 else if (message.StartsWith("NAME ACCEPTED"))
@@ -68,37 +94,50 @@
                 }
                 else if (message.StartsWith("QUIT ACCEPTED"))
                 {
-                    joinToolStripMenuItem.Enabled = true;
-                    leaveRoomToolStripMenuItem.Enabled = false;
-                    sendButton.Invoke(new Action(() => sendButton.Enabled = false));
-                    onlineUsers.Invoke(new Action(onlineUsers.Items.Clear));
-                    chat.Invoke(new Action(chat.Clear));
-                    textField.Invoke(new Action(textField.Clear));
+                    ProcessQuit();
                 }
                 else if(message.StartsWith("ONLINE"))
                 {
-                    onlineUsers.Invoke(() =>
-                    {
-                        onlineUsers.Items.Clear();
-                        message.Split()[1].Split(';').ToList().ForEach(p => onlineUsers.Items.Add(p));
-                    });
+                    ProcessOnline(message);
                 }
                 else if (message.StartsWith("JOIN ACCEPTED"))
                 {
                     joinToolStripMenuItem.Enabled = false;
                     leaveRoomToolStripMenuItem.Enabled = true;
                     sendButton.Invoke(new Action(() => sendButton.Enabled = true));
-                    RequestOnlineUsers();
+                    var roomTag = message.Split()[2];
+                    AddMessage($"You joined to the room {roomTag}");
+                    SendRequest("/online");
                 }
-                else if(message.StartsWith("JOINED") || message.StartsWith("LEFT") || message.StartsWith("CHNAME"))
+                else if(message.StartsWith("JOINED"))
                 {
-                    RequestOnlineUsers();
+                    var username = message.Split()[1];
+                    AddMessage($"User {username} joined the room");
+                    SendRequest("/online");
+                }
+                else if (message.StartsWith("LEFT"))
+                {
+                    var username = message.Split()[1];
+                    AddMessage($"User {username} leave the room");
+                    SendRequest("/online");
+                }
+                else if (message.StartsWith("CHNAME"))
+                {
+                    var oldname = message.Split()[2];
+                    var currentName = message.Split()[4];
+                    AddMessage($"User {oldname} changed name to {currentName}");
+                    SendRequest("/online");
                 }
                 else if(message.StartsWith("QUIT ACCEPTED"))
                 {
                     joinToolStripMenuItem.Enabled = true;
                     leaveRoomToolStripMenuItem.Enabled = false;
                     sendButton.Enabled = false;
+                }
+                else if (message.StartsWith("CREATE ACCEPTED"))
+                {
+                    var roomTag = message.Split()[2];
+                    AddMessage($"You have created the room with tag {roomTag}");
                 }
                 else
                 {
@@ -124,47 +163,43 @@
 
         private void joinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new JoinForm(client);
+            var form = new Join(client);
             form.Show();
         }
 
         private void createRoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.Writer.WriteLineAsync("/room");
-            client.Writer.FlushAsync();
+            SendRequest("/room");
         }
 
         private void sendButton_Click(object sender, EventArgs e)
         {
             var message = textField.Text;
-            client.Writer.WriteLineAsync(message);
-            client.Writer.FlushAsync();
+            SendRequest(message);
             AddMessage($"[You]: {message}");
             textField.Clear();
         }
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.Writer.WriteLineAsync("/disconnect");
-            client.Writer.FlushAsync();
+            SendRequest("/disconnect");
         }
 
         private void leaveRoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.Writer.WriteLineAsync("/quit");
-            client.Writer.FlushAsync();
+            SendRequest("/quit");
             chat.Clear();
         }
 
         private void setNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new NameForm(client);
+            var form = new SetName(client);
             form.Show();
         }
 
-        private void RequestOnlineUsers()
+        private void SendRequest(string request)
         {
-            client.Writer.WriteLineAsync("/online");
+            client.Writer.WriteLineAsync(request);
             client.Writer.FlushAsync();
         }
     }
